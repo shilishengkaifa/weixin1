@@ -1,5 +1,11 @@
 package org.fkjava.weixin1.controller;
 
+import java.io.StringReader;
+
+import javax.xml.bind.JAXB;
+
+import org.fkjava.weixin1.domain.InMessage;
+import org.fkjava.weixin1.service.MessageTypeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +53,16 @@ public class MessageReceiverController {
 			@RequestBody String xml) {
 		LOG.debug("收到用户发送给公众号的信息: \n-----------------------------------------\n"
 				+ "{}\n-----------------------------------------\n", xml);
+		
+		//截取消息类型
+		String type= xml.substring(0);
+		Class<InMessage> cla =MessageTypeMapper.getClass(type);
+		
+		//使用JAXB完成XML转换为Java对象的操作
+		InMessage inMessage= JAXB.unmarshal(new StringReader(xml), cla);
+		
+		LOG.debug("转换得到的消息对象  \n{}\n",inMessage.toString()	);
+		
 		// 由于后面会把消息放入队列中，所以这里直接返回success。
 		return "success";
 	}
