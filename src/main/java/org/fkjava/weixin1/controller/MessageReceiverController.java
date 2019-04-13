@@ -1,5 +1,8 @@
 package org.fkjava.weixin1.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 
 import javax.xml.bind.JAXB;
@@ -8,6 +11,14 @@ import org.fkjava.weixin1.domain.InMessage;
 import org.fkjava.weixin1.service.MessageTypeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +37,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageReceiverController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MessageReceiverController.class);
-
+    
+	@Autowired
+	@Qualifier("inMessageTemplate")
+	private RedisTemplate<String,InMessage> inMessageTemplate;
+	
 	@GetMapping // 只处理GET请求
 	public String echo(//
 			@RequestParam("signature") String signature, //
@@ -66,6 +81,27 @@ public class MessageReceiverController {
 		
 		LOG.debug("转换得到的消息对象  \n{}\n",inMessage.toString()	);
 		
+		inMessageTemplate.convertAndSend("weixin1" +inMessage.getMsqType(), inMessage);
+		
+		/*
+		 * //那消息放入队列 inMessageTemplate.execute(new RedisCallback<String>() { private
+		 * byte[] out;
+		 * 
+		 * //connection对象表示Redis数据库的连接
+		 * 
+		 * @Override public String doInRedis(RedisConnection connection) throws
+		 * DataAccessException{ try { //发布消息的时候，需要准备两个byte[]，
+		 * //一个作为通道名称来使用，类似无线广播，不同频道声音是隔离的。通道名称是Redis用来隔离不同数据的。
+		 * 
+		 * String channel ="weixin1" +inMessage.getMsqType();
+		 * 
+		 * //消息内容要自己序列化才能放入队列中 ByteArrayOutputStream out =new
+		 * ByteArrayOutputStream();//输出流 ObjectOutputStream oos =new
+		 * ObjectOutputStream(out); oos.writeObject(inMessage);
+		 * 
+		 * connection.publish(channel.getBytes(),out.toByteArray()); }catch(Exception e)
+		 * { LOG.error("把消息放入队列时出现问题:" +e.getLocalizedMessage(),e); } return null; } });
+		 */
 		// 由于后面会把消息放入队列中，所以这里直接返回success。
 		return "success";
 	}
