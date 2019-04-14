@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.fkjava.weixin1.domain.InMessage;
+import org.fkjava.weixin1.domain.event.EventInMessage;
 import org.fkjava.weixin1.domain.image.ImageInMessage;
 import org.fkjava.weixin1.domain.link.LinkInMessage;
 import org.fkjava.weixin1.domain.location.LocationInMessage;
@@ -23,7 +24,9 @@ public class MessageTypeMapper {
 		typeMap.put("location",LocationInMessage.class);
 		typeMap.put("shortvideo",ShortvideoInMessage.class);
 		typeMap.put("video",VideoInMessage.class);
-		typeMap.put("voice",VoiceInMessage.class);	
+		typeMap.put("voice",VoiceInMessage.class);
+		
+		typeMap.put("event",EventInMessage.class);
 	}
 	//通过消息类型获取对应的消息
 	@SuppressWarnings("unchecked")
