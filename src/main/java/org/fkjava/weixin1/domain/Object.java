@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @XmlAccessorType(XmlAccessType.FIELD)//JAXB从字段获取配置信息
 @XmlRootElement(name ="xml")//JAXB读取XML时根元素名称
-public abstract class InMessage  implements Serializable {
+public abstract class Object  implements Serializable {
 	
 	
 	private static final long serialVersionUID =1L;

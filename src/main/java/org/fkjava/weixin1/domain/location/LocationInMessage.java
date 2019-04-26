@@ -5,13 +5,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.fkjava.weixin1.domain.InMessage;
+import org.fkjava.weixin1.domain.Object;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name ="xml")
-public class LocationInMessage  extends InMessage {
+public class LocationInMessage  extends Object {
 
 	/**
 	 * 

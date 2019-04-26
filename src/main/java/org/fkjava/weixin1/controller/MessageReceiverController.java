@@ -7,7 +7,7 @@ import java.io.StringReader;
 
 import javax.xml.bind.JAXB;
 
-import org.fkjava.weixin1.domain.InMessage;
+import org.fkjava.weixin1.domain.Object;
 import org.fkjava.weixin1.service.MessageTypeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class MessageReceiverController {
     
 	@Autowired
 	@Qualifier("inMessageTemplate")
-	private RedisTemplate<String,InMessage> inMessageTemplate;
+	private RedisTemplate<String,Object> inMessageTemplate;
 	
 	@GetMapping // 只处理GET请求
 	public String echo(//
@@ -74,10 +74,10 @@ public class MessageReceiverController {
 		String type= xml.substring(xml.indexOf("<MsgType><![CDATA[") + 18);
 		type =xml.substring(0,xml.indexOf("<]]></MsgType>"));
 		
-		Class<InMessage> cla =MessageTypeMapper.getClass(type);
+		Class<Object> cla =MessageTypeMapper.getClass(type);
 		
 		//使用JAXB完成XML转换为Java对象的操作
-		InMessage inMessage= JAXB.unmarshal(new StringReader(xml), cla);
+		Object inMessage= JAXB.unmarshal(new StringReader(xml), cla);
 		
 		LOG.debug("转换得到的消息对象  \n{}\n",inMessage.toString()	);
 		
