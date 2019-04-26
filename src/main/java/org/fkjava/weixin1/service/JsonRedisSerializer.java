@@ -4,14 +4,18 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
+import java.util.Arrays;
 
 import org.fkjava.weixin1.domain.InMessage;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
-public class JsonRedisSerializer extends Jackson2JsonRedisSerializer<InMessage> {
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+public class JsonRedisSerializer extends Jackson2JsonRedisSerializer<InMessage> {
+             
+	private ObjectMapper objectMapper = new ObjectMapper();
+	
 	public JsonRedisSerializer() {
 		super(InMessage.class);
 	}
