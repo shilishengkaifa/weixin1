@@ -55,19 +55,15 @@ public class JsonRedisSerializer extends Jackson2JsonRedisSerializer<Object> {
 		ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 		DataInputStream in = new DataInputStream(bais);
 
-		// 在写的时候，先把类名的长度传入，此时要先得到类名的长度，再根据类名的长度来读取类名。
+		
 		try {
 			int length = in.readInt();
 			byte[] classNameBytes = new byte[length];
-			// 把字节数组填满才返回
 			in.readFully(classNameBytes);
-			// 把读取到的字节数组，转换为类名
 			String className = new String(classNameBytes, "UTF-8");
-			// 通过类名，加载类对象
 			@SuppressWarnings("unchecked")
 			Class<? extends Object> cla = (Class<? extends Object>) Class.forName(className);
 
-			// length + 4 : 表示类名的长度和int的长度，一个int占4个字节
 			return this.objectMapper.readValue(Arrays.copyOfRange(bytes, length + 4, bytes.length), cla);
 		} catch (Exception e) {
 			throw new SerializationException("反序列化对象出现问题：" + e.getLocalizedMessage(), e);

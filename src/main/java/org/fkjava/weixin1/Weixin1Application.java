@@ -16,9 +16,7 @@ public class Weixin1Application {
     public RedisTemplate<String,Object> inMessageTemplate(@Autowired RedisConnectionFactory redisConnectionFactory){
 		RedisTemplate<String,Object> template =new RedisTemplate<>();
 		template.setConnectionFactory(redisConnectionFactory);
-		//设置一个序列化程序，就可以非常方便！
-		//由于不确定是那个类型，InMessage只是一个父类，他又许多不同的子类
-		//因此扩展jackson2jsonRedisSerializer变得极其重要：重写方法 不要构造参数
+		
 		template.setValueSerializer(new JsonRedisSerializer());
 		
 		return template;
