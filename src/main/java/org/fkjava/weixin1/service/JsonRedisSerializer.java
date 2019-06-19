@@ -23,8 +23,6 @@ public class JsonRedisSerializer extends Jackson2JsonRedisSerializer<InMessage> 
 
 	@Override
 	public byte[] serialize(InMessage t) throws SerializationException {
-		// 我们现在希望把对象序列化成JSON字符串，但是JSON字符串本身不确定对象的类型，所以需要扩展：
-		// 序列化的时候先把类名的长度写出去，再写出类名，最后再来写JSON字符串。
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();// 把数据输出到一个字节数组
 		DataOutputStream out = new DataOutputStream(baos);// 把输出流封装成数据输出流
@@ -45,7 +43,6 @@ public class JsonRedisSerializer extends Jackson2JsonRedisSerializer<InMessage> 
 		} catch (Exception e) {
 			throw new SerializationException("序列化对象出现问题：" + e.getLocalizedMessage(), e);
 		}
-//		return super.serialize(t);
 	}
 
 	
