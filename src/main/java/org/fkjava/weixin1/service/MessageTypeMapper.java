@@ -3,7 +3,7 @@ package org.fkjava.weixin1.service;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.fkjava.weixin1.domain.Object;
+import org.fkjava.weixin1.domain.InMessage;
 import org.fkjava.weixin1.domain.event.EventInMessage;
 import org.fkjava.weixin1.domain.image.ImageInMessage;
 import org.fkjava.weixin1.domain.link.LinkInMessage;
@@ -15,7 +15,7 @@ import org.fkjava.weixin1.domain.voice.VoiceInMessage;
 
 public class MessageTypeMapper {
    
-	private static Map<String,Class<? extends Object>> typeMap =new ConcurrentHashMap<>();
+	private static Map<String,Class<? extends InMessage>> typeMap =new ConcurrentHashMap<>();
 	static {
 		typeMap.put("text",TextInMessage.class);
 		typeMap.put("image",ImageInMessage.class);
@@ -28,7 +28,7 @@ public class MessageTypeMapper {
 		typeMap.put("event",EventInMessage.class);
 	}
 	@SuppressWarnings("unchecked")
-	public static <T extends Object>Class<T> getClass(String type){
+	public static <T extends InMessage>Class<T> getClass(String type){
 		return (Class<T>) typeMap.get(type);
 	}
 }

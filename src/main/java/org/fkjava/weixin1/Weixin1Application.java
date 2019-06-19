@@ -1,6 +1,6 @@
 package org.fkjava.weixin1;
 
-import org.fkjava.weixin1.domain.Object;
+import org.fkjava.weixin1.domain.InMessage;
 import org.fkjava.weixin1.service.JsonRedisSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -13,8 +13,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 public class Weixin1Application {
 	//相当于spring的XML配置方式中的<bean>元素
 	@Bean
-    public RedisTemplate<String,Object> inMessageTemplate(@Autowired RedisConnectionFactory redisConnectionFactory){
-		RedisTemplate<String,Object> template =new RedisTemplate<>();
+    public RedisTemplate<String,InMessage> inMessageTemplate(@Autowired RedisConnectionFactory redisConnectionFactory){
+		RedisTemplate<String,InMessage> template =new RedisTemplate<>();
 		template.setConnectionFactory(redisConnectionFactory);
 		
 		template.setValueSerializer(new JsonRedisSerializer());

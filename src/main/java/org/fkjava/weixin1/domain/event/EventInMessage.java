@@ -2,11 +2,11 @@ package org.fkjava.weixin1.domain.event;
 
 import javax.xml.bind.annotation.XmlElement;
 
-import org.fkjava.weixin1.domain.Object;
+import org.fkjava.weixin1.domain.InMessage;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class EventInMessage extends Object {
+public class EventInMessage extends InMessage {
 
 	/**
 	 * 
