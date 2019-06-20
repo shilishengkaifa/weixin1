@@ -49,18 +49,10 @@ public class MessageReceiverController {
 			@RequestParam("nonce") String nonce, //
 			@RequestParam("echostr") String echostr//
 	) {
-		// 正常来讲，需要把timestamp和nonce放入一个数组，并进行排序
-		// 接着把排序后的两个元素拼接成一个新的String
-		// 使用SHA-1算法对新的String进行加密
-		// 最后把加密的结果跟signature进行比较，如果相同表示验证通过，返回echostr
-
-		// 原路返回echostr的值，返回以后微信公众号平台就能够认为：服务器对接成功
 		return echostr;
 	}
 
-	// 当微信客户端发送任意消息给公众号的时候，消息都会通过POST方式提交到当前类里面。
-	// @PostMapping专门用于处理POST请求。
-	// 消息的格式是XML形式的字符串，整个消息放入了请求体里面。
+	
 	@PostMapping
 	public String onMessage(@RequestParam("signature") String signature, //
 			@RequestParam("timestamp") String timestamp, //
@@ -83,26 +75,7 @@ public class MessageReceiverController {
 		
 		inMessageTemplate.convertAndSend("weixin1" +inMessage.getMsqType(), inMessage);
 		
-		/*
-		 * //那消息放入队列 inMessageTemplate.execute(new RedisCallback<String>() { private
-		 * byte[] out;
-		 * 
-		 * //connection对象表示Redis数据库的连接
-		 * 
-		 * @Override public String doInRedis(RedisConnection connection) throws
-		 * DataAccessException{ try { //发布消息的时候，需要准备两个byte[]，
-		 * //一个作为通道名称来使用，类似无线广播，不同频道声音是隔离的。通道名称是Redis用来隔离不同数据的。
-		 * 
-		 * String channel ="weixin1" +inMessage.getMsqType();
-		 * 
-		 * //消息内容要自己序列化才能放入队列中 ByteArrayOutputStream out =new
-		 * ByteArrayOutputStream();//输出流 ObjectOutputStream oos =new
-		 * ObjectOutputStream(out); oos.writeObject(inMessage);
-		 * 
-		 * connection.publish(channel.getBytes(),out.toByteArray()); }catch(Exception e)
-		 * { LOG.error("把消息放入队列时出现问题:" +e.getLocalizedMessage(),e); } return null; } });
-		 */
-		// 由于后面会把消息放入队列中，所以这里直接返回success。
+		
 		return "success";
 	}
 }
